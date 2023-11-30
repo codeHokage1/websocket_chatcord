@@ -18,9 +18,9 @@ socket.on("welcome", (payload) => {
 });
 
 // listen for user joined message to send to all other users
-socket.on("user joined", (message) => {
-	console.log(message);
-   displayMessage("Admin", message);
+socket.on("user joined", (payload) => {
+	console.log(payload);
+   displayMessage(payload);
    autoScroll();
 });
 
@@ -34,16 +34,16 @@ chatForm.addEventListener("submit", (e) => {
 });
 
 // listen for chat message from the server
-socket.on("chat message", message => {
-   console.log("New message: ", message)
-   displayMessage(currentUser, message)
+socket.on("chat message", payload => {
+   console.log("New message: ", payload)
+   displayMessage(payload)
    autoScroll();
 })
 
 // listen for user left message to send to all other users
-socket.on("user left", (message) => {
-   console.log(message);
-   displayMessage("Admin", message);
+socket.on("user left", (payload) => {
+   console.log(payload);
+   displayMessage(payload);
    autoScroll();
 });
 
