@@ -30,6 +30,12 @@ io.on("connection", (socket) => {
 		socket.broadcast
 			.to(user.room)
 			.emit("user joined", formatMessage("Admin", `${user.username} has joined the chat room`));
+
+		// display room detials to the connected client
+		io.to(user.room).emit("display room info", {
+			room: user.room,
+			users: userFunctions.getRoomUsers(user.room)
+		});
 	});
 
 	// listen for chat message from client
@@ -48,10 +54,20 @@ io.on("connection", (socket) => {
 		console.log("User disconnected");
 
 		// get current user
-		const user = userFunctions.getCurrentUser(socket.id);
-		if (!user) return;
+		const user = userFunctions.userLeave(socket.id);
 
-		io.to(user.room).emit("user left", formatMessage("Admin", `${user.username} has left the chat room`));
+		if(!user) return;
+
+		io.to(user.room).emit(
+			"user left",
+			formatMessage("Admin", `${user.username} has left the chat room`)
+		);
+
+		// display room detials to the connected client
+		io.to(user.room).emit("display room info", {
+			room: user.room,
+			users: userFunctions.getRoomUsers(user.room)
+		});
 	});
 });
 
